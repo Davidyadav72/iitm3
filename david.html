@@ -71,78 +71,45 @@
 <body>
     <div class="container">
         <h2>Make a Payment</h2>
-        <div class="payment-method">
-            <label for="method">Select Payment Method:</label>
-            <select id="method" onchange="showPaymentOptions()">
-                <option value="none">Choose a payment method</option>
-                <option value="upi">UPI</option>
-            </select>
-        </div>
+        <form action="/make_payment" method="POST">
+            <div class="payment-method">
+                <label for="method">Select Payment Method:</label>
+                <select id="method" name="method" onchange="showPaymentOptions()">
+                    <option value="none">Choose a payment method</option>
+                    <option value="upi">UPI</option>
+                </select>
+            </div>
 
-        <!-- UPI Options -->
-        <div id="upi-options" class="upi-options">
-            <label>
-                <input type="radio" name="upi-method" value="phonepe" onclick="setUPIMethod('PhonePe')"> PhonePe
-            </label>
-            <label for="upi-id">Enter Your UPI ID:</label>
-            <input type="text" id="upi-id" placeholder="Enter your UPI ID (e.g., yourname@upi)">
-            <button onclick="verifyUPI()">Verify UPI ID</button>
-        </div>
+            <!-- UPI Options -->
+            <div id="upi-options" class="upi-options">
+                <label>
+                    <input type="radio" name="upi-method" value="phonepe" onclick="setUPIMethod('PhonePe')"> PhonePe
+                </label>
+                <label for="upi-id">Enter Your UPI ID:</label>
+                <input type="text" id="upi-id" name="upi_id" placeholder="Enter your UPI ID (e.g., yourname@upi)" required>
+            </div>
 
-        <!-- Proceed to Pay Button -->
-        <button id="pay-btn" onclick="makePayment()" disabled>Proceed to Pay ₹30</button>
+            <!-- Proceed to Pay Button -->
+            <button type="submit">Proceed to Pay ₹30</button>
+        </form>
     </div>
 
     <script>
-        let selectedMethod = '';
-        let isUPIVerified = false;
-        let upiID = '';
-
         function showPaymentOptions() {
             const method = document.getElementById('method').value;
             const upiOptions = document.getElementById('upi-options');
-            const payButton = document.getElementById('pay-btn');
 
             if (method === 'upi') {
                 upiOptions.style.display = 'block';
-                payButton.disabled = true; // Disable until UPI is verified
             } else {
                 upiOptions.style.display = 'none';
-                payButton.disabled = true; // Disable payment button
             }
         }
 
         function setUPIMethod(method) {
             selectedMethod = method;
         }
-
-        function verifyUPI() {
-            upiID = document.getElementById('upi-id').value.trim();
-            if (upiID === '') {
-                alert('Please enter a valid UPI ID.');
-                return;
-            }
-            if (!upiID.includes('@')) {
-                alert('Invalid UPI ID format. Please try again.');
-                return;
-            }
-            isUPIVerified = true;
-            alert('UPI ID verified successfully!');
-            document.getElementById('pay-btn').disabled = false; // Enable the pay button
-        }
-
-        function makePayment() {
-            if (!isUPIVerified) {
-                alert('Please verify your UPI ID first.');
-                return;
-            }
-
-            // UPI Payment Link
-            const upiLink = `upi://pay?pa=9369179899@ibl&pn=David%20Yadav&am=30&cu=INR`;
-
-            // Redirect to the UPI app
-            window.location.href = upiLink;
-        }
     </script>
 </body>
 </html>
+
